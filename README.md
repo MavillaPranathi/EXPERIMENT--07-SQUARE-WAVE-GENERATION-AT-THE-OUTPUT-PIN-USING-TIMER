@@ -1,4 +1,4 @@
-# EXPERIMENT--07-SQUARE-WAVE-GENERATION-AT-THE-OUTPUT-PIN-USING-TIMER
+# EXPERIMENT--06-SQUARE-WAVE-GENERATION-AT-THE-OUTPUT-PIN-USING-TIMER
 
 ### Aim:
 To generate a PWM wave at the timer pin output and  simuate it on  proteus using an virtual oscilloscope  
@@ -91,49 +91,214 @@ Step14. click on debug and simulate using simulation as shown below
  ![image](https://github.com/vasanthkumarch/EXPERIMENT--07-SQUARE-WAVE-GENERATION-AT-THE-OUTPUT-PIN-USING-TIMER/assets/36288975/b8efbfc2-f0c5-4106-8117-3a6e7ac87f6c)
 
 
- 
+ ### DEVELOPED BY :M.Pranathi
+ ### REGISTER NO :212222240064
 
   
 
 ## STM 32 CUBE PROGRAM :
+python
+#include "main.h"
+
+
+
+TIM_HandleTypeDef htim2;
+
+
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_TIM2_Init(void);
+
+
+
+int main(void)
+{
+  
+  HAL_Init();
+
+ 
+  SystemClock_Config();
+
+ 
+ 
+  MX_GPIO_Init();
+  MX_TIM2_Init();
+ 
+  HAL_TIM_Base_Start(&htim2);
+  HAL_TIM_PWM_Init(&htim2);
+  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
+
+  
+  while (1)
+  {
+    
+  }
+  
+}
+
+
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+ 
+  __HAL_RCC_PWR_CLK_ENABLE();
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
+  
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+ 
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+
+static void MX_TIM2_Init(void)
+{
+
+ 
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+ 
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 0;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 10000;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 2500;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+ 
+  HAL_TIM_MspPostInit(&htim2);
+
+}
+
+
+static void MX_GPIO_Init(void)
+{
+
+ 
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+
+}
+
+
+void Error_Handler(void)
+{
+ 
+  __disable_irq();
+  while (1)
+  {
+  }
+  
+}
+
+#ifdef  USE_FULL_ASSERT
+
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  
+}
+#endif /* USE_FULL_ASSERT */
+
+
 
 
 
 
 
 ## Output screen shots of proteus  :
+
+
+![PMC_6 1 1](https://github.com/gummadileepkumar/EXPERIMENT--07-SQUARE-WAVE-GENERATION-AT-THE-OUTPUT-PIN-USING-TIMER/assets/118707761/bef6847b-fffe-4835-bac5-41fe4d58f01a)
+
  
  
  ## CIRCUIT DIAGRAM (EXPORT THE GRAPHICS TO PDF AND ADD THE SCREEN SHOT HERE): 
- 
+ ![PCM_design_6 1](https://github.com/gummadileepkumar/EXPERIMENT--07-SQUARE-WAVE-GENERATION-AT-THE-OUTPUT-PIN-USING-TIMER/assets/118707761/4299a3af-ae4e-463c-a47e-af143dfffc04)
+
+ ## Screen shots of Digital Oscilloscope:
+ ### PULSE AT 2500 :
+![PMC_6 1_25](https://github.com/gummadileepkumar/EXPERIMENT--07-SQUARE-WAVE-GENERATION-AT-THE-OUTPUT-PIN-USING-TIMER/assets/118707761/ff8952d5-d73e-4440-885c-3cb216486022)
+
+### PULSE AT 5000 :
+![PMC_6 2_50](https://github.com/gummadileepkumar/EXPERIMENT--07-SQUARE-WAVE-GENERATION-AT-THE-OUTPUT-PIN-USING-TIMER/assets/118707761/87be1535-bb79-477a-b6b8-64952861afb0)
+
+
+### PULSE AT 7500 :
+![PMC_6 3_75](https://github.com/gummadileepkumar/EXPERIMENT--07-SQUARE-WAVE-GENERATION-AT-THE-OUTPUT-PIN-USING-TIMER/assets/118707761/54bd04cf-5636-4c45-a9f0-39f5f6b99c58)
+
 
 ## DUTY CYCLE AND FREQUENCY CALCULATION 
-FOR PULSE AT 500
+### FOR PULSE AT 2500
 
-TON = 
-TOFF=
-TOTAL TIME = 
-FREQUENCY = 1/(TOTAL TIME)
+##### TON = 3*50 = 150 * 10^-6  
+##### TOFF = 9*50 = 450 * 10^-6  
+##### TOTAL TIME = 600 
+##### FREQUENCY = 1/600 = 0.00166 = 1.6 KHZ 
+##### Duty Cycle % = (150/600)*100 = 25%
 
-FOR PULSE AT 700
+### FOR PULSE AT 5000
 
-TON = 
-TOFF=
-TOTAL TIME = 
-FREQUENCY = 1/(TOTAL TIME)
+##### TON = 6*50 = 300 * 10^-6    
+##### TOFF= 6*50 = 300 * 10^-6 
+##### TOTAL TIME = 600 
+##### FREQUENCY = 1/600 = 0.00166 = 1.6 KHZ
+##### Duty Cycle % = (300/600)*100 = 50%
 
 
-FOR PULSE AT 900
+### FOR PULSE AT 7500
 
-TON = 
-TOFF=
-TOTAL TIME = 
-FREQUENCY = 1/(TOTAL TIME)
+##### TON = 9*50 = 450 * 10^-6 
+##### TOFF= 3*50 = 150 * 10^-6 
+##### TOTAL TIME = 600  
+##### FREQUENCY = 1/600 = 0.00166 = 1.6 KHZ 
+##### Duty Cycle % = (450/600)*100 = 75%
 
 
 ## Result :
-A PWM Signal is generated using the following frequency and various duty cycles are simulated 
-
-
-
-
+A PWM Signal is generated using the following frequency and various duty cycles are simulated
