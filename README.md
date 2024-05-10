@@ -97,6 +97,7 @@ Step14. click on debug and simulate using simulation as shown below
   
 
 ## STM 32 CUBE PROGRAM :
+```
 python
 #include "main.h"
 
@@ -245,7 +246,7 @@ void assert_failed(uint8_t *file, uint32_t line)
 }
 #endif /* USE_FULL_ASSERT */
 
-
+```
 
 
 
